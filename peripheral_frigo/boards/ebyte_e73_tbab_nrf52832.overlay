@@ -1,0 +1,238 @@
+/*
+ * Copyright (c) 2022, Thomas Stranger
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/*
+ * Example configuration of a DS18b20 device on an Arduino serial bus, using
+ * the zephyr-serial 1-Wire driver.
+ * Open drain configuration allows communication by simply connecting the bus
+ * line to the UART RX pin as well as the TX pin
+ * An external pull-up should be added anyways.
+ */
+
+
+
+
+/ {
+
+
+	arduino_header: connector {
+		compatible = "arduino-header-r3";
+		#gpio-cells = <2>;
+		gpio-map-mask = <0xffffffff 0xffffffc0>;
+		gpio-map-pass-thru = <0 0x3f>;
+		gpio-map = <0 0 &gpio0 3 0>,	/* A0 */
+			   <1 0 &gpio0 4 0>,	/* A1 */
+			   <2 0 &gpio0 28 0>,	/* A2 */
+			   <3 0 &gpio0 29 0>,	/* A3 */
+			   <4 0 &gpio0 30 0>,	/* A4 */
+			   <5 0 &gpio0 31 0>,	/* A5 */
+			   <6 0 &gpio0 11 0>,	/* D0 */
+			   <7 0 &gpio0 12 0>,	/* D1 */
+			   <8 0 &gpio0 13 0>,	/* D2 */
+			   <9 0 &gpio0 14 0>,	/* D3 */
+			   <10 0 &gpio0 15 0>,	/* D4 */
+			   <11 0 &gpio0 16 0>,	/* D5 */
+			   <12 0 &gpio0 17 0>,	/* D6 */
+			   <13 0 &gpio0 18 0>,	/* D7 */
+			   <14 0 &gpio0 19 0>,	/* D8 */
+			   <15 0 &gpio0 20 0>,	/* D9 */
+			   <16 0 &gpio0 22 0>,	/* D10 */
+			   <17 0 &gpio0 23 0>,	/* D11 */
+			   <18 0 &gpio0 24 0>,	/* D12 */
+			   <19 0 &gpio0 25 0>,	/* D13 */
+			   <20 0 &gpio0 26 0>,	/* D14 */
+			   <21 0 &gpio0 27 0>;	/* D15 */
+	};
+
+	leds {
+		led2: led2 {
+			gpios = <&gpio0 27 0>;
+			label = "Green LED";
+		};
+		poweron: poweron_0 {	
+			gpios = <&gpio0 19 (GPIO_PUSH_PULL | GPIO_ACTIVE_HIGH)>;
+			label = "power";
+		};
+		fan2: fan2_0 {
+			gpios = <&gpio0 6 (GPIO_PUSH_PULL | GPIO_ACTIVE_HIGH)>;
+			label = "fan2";
+		};
+	};
+
+	pwmleds {
+		compatible = "pwm-leds";
+		fanpwm1: fanpwm_1 {
+			pwms = <&pwm0 0 PWM_USEC(50) PWM_POLARITY_NORMAL>;
+		};
+		fanpwm2: fanpwm_2 {
+			pwms = <&pwm0 1 PWM_USEC(50) PWM_POLARITY_NORMAL>;
+		};		
+	};
+
+
+	aliases {
+		led0 = &led0;
+		led1 = &led1;
+		sw0 = &button0;
+		sw1 = &button1;
+		bootloader-led0 = &led0;
+		watchdog0 = &wdt0;
+		fan2 = &fan2;
+		poweron = &poweron;
+	};
+
+};
+
+&uart0_sleep {
+	group1 {
+		low-power-enable;
+	};
+};
+
+&led0 {
+	gpios = <&gpio0 25 (1 << 8)>;
+	label = "Yellow LED";
+};
+
+&led1 {
+	gpios = <&gpio0 26 0>;
+	label = "Blu LED";
+};
+
+&fan2 {
+ 	gpios = <&gpio0 6  (GPIO_ACTIVE_HIGH)>;
+};
+
+
+&pinctrl {
+	pwm0_default_custom: pwm0_default_custom {
+			group1 {
+			psels = <NRF_PSEL(PWM_OUT0,0,7)>, 
+					<NRF_PSEL(PWM_OUT1,0,13)>;
+			nordic,invert;
+		};
+
+	};
+	pwm0_sleep_custom: pwm0_sleep_custom {
+			group1 {
+			psels = <NRF_PSEL(PWM_OUT0,0,7)>, 
+					<NRF_PSEL(PWM_OUT1,0,13)>;
+			low-power-enable;
+		};
+
+	};
+};
+
+&pwm0 {
+	status = "okay";
+	pinctrl-0 = <&pwm0_default_custom>;
+	pinctrl-1 = <&pwm0_sleep_custom>;
+	pinctrl-names = "default","sleep";
+};
+
+arduino_serial: &uart0 {
+	current-speed = <115200>;
+	pinctrl-0 = <&uart0_default>;
+	pinctrl-1 = <&uart0_sleep>;
+	pinctrl-names = "default", "sleep";
+};
+
+&poweron {
+	gpios = <&gpio0 19 (GPIO_ACTIVE_HIGH )>;
+};
+
+&pwm0_default {
+	group2 {
+		psels = <NRF_PSEL(PWM_OUT0, 0, 5)>;
+		nordic,invert;
+	};
+
+	group1 {
+		psels = <NRF_PSEL(PWM_OUT1, 0, 1)>;
+	};
+};
+
+&uart0_default {
+	group1 {
+		psels = <NRF_PSEL(UART_TX, 0, 16)>, <NRF_PSEL(UART_RX, 0, 17)>;
+	};
+};
+
+&uart0_sleep {
+	group1 {
+		psels = <NRF_PSEL(UART_TX, 0, 16)>, <NRF_PSEL(UART_RX, 0, 17)>;
+	};
+};
+
+
+&radio {
+    status = "disabled";
+};
+
+&button1 {
+	gpios = <&gpio0 15 (GPIO_ACTIVE_LOW | GPIO_PULL_DOWN)>;
+};
+
+&adc {
+	status = "disabled";
+};
+
+&spi0 {
+    status = "disabled";
+};
+&spi1 {
+    status = "disabled";
+};
+&spi2 {
+    status = "disabled";
+};
+&i2c0 {
+    status = "disabled";
+};
+&i2c1 {
+    status = "disabled";
+};
+&i2s0 {
+    status = "disabled";
+};
+
+&reg {
+        regulator-initial-mode = <NRF5X_REG_MODE_DCDC>;
+	status = "okay";
+};
+
+&clock {
+	status = "okay";
+};
+
+&ccm {
+	status = "disabled";
+};
+
+&ecb {
+	status = "disabled";
+};
+
+&rng {
+	status = "okay";
+};
+
+#include "serial_overlay.dtsi"
+&ccm {
+	status = "disabled";
+};
+
+&mwu {
+	status = "disabled";
+};
+
+&temp {
+	status = "disabled";
+};
+
+&uicr {
+	status = "disabled";
+};
