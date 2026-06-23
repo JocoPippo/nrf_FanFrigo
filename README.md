@@ -23,6 +23,8 @@ Attualmente la revisione del pcb è la 2.0 in cui è stato aggiunto il supporto 
 # SOFTWARE GESTIONE
 Basato sull'esempio "NRF Blinky" della nordic semiconductor è stato customizzato aggiungendo le funzionalità di riservatezza e di gestione della board.
 
-La [pagina di gestione](AndroidApp/images/app1.png) consente di vedere lo stato corrente ed, eventualmente, di forzarlo. ![pagina di gestione](AndroidApp/images/app1.png "Board Status")
+La [pagina di gestione](AndroidApp/images/app1.png) consente di vedere lo stato corrente ed, eventualmente, di forzarlo. 
+![pagina di gestione](AndroidApp/images/app1.png "Board Status")
 
-Nella [pagina di settings](AndroidApp/images/App2.png ) si può cambiare la password che avrà valore transitorio fino al nuovo reset della scheda o tramite il ciclo power-off -> power-on o attraverso la pressione del tasto di reset. ![pagina di settings](AndroidApp/images/App2.png "App Settings")
+Nella [pagina di settings](AndroidApp/images/App2.png ) si può cambiare la password che avrà valore transitorio fino al nuovo reset della scheda o tramite il ciclo power-off -> power-on o attraverso la pressione del tasto di reset. 
+![pagina di settings](AndroidApp/images/App2.png "App Settings")
