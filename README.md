@@ -8,3 +8,12 @@ Così ho deciso di realizzare una soluzione che permetesse di:
 - non pesare sui consumi elettrici quando non necessario.
 
 La cartella "pheripheral_frigo" contiene il progetto per "Visual studio Code" del firmware della board di gestione delle ventole.
+La cartella hardware contiene il progetto in Kicad 9 e i file gerber della scheda di controllo.
+"AndroidApp" contiene l'applicativo Android di gestione della board.
+Ci si riferisca al file README.md interno a ciascuna cartella per dettagli specifici.
+
+# BOARD
+Attualmente la revisione del pcb è la 2.0 in cui è stato aggiunto il supporto per il sensore tachimetrico per ciascuna ventola e la possibilità di valutare la tensione della batteria. Al fine di mantenere i consumi bassi si è scelto di inserire il partitore di tensione sotto il mosfet di controllo della ventola1. Questa scelta, benchè renda più semplice il pcb, complica la parte software che è ancora in fase di sviluppo. Probabilmente verrà sostituta aggiungendo un unteriore switch.
+
+# SOFTWARE GESTIONE
+Basato sull'esempio "NRF Blinky" della nordic semiconductor è stato customizzato aggiungendo le funzionalità di riservatezza e di gestione della borad.
