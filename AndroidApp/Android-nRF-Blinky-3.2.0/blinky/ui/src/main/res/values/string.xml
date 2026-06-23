@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_retry">Retry</string>
+
+    <string name="blinky_led">LED1</string>
+    <string name="blinky_led_descr">Switch to toggle the LED1</string>
+
+    <string name="blinky_temperature">Acquired Temperature</string>
+    <string name="blinky_temperature_descr">Temperature in °C</string>
+
+    <string name="blinky_tempThreshold">Temp. Threshold</string>
+    <string name="blinky_tempThreshold_descr">Threshold in °C</string>
+
+    <string name="blinky_dutyCycle">Current DutyCycle</string>
+    <string name="blinky_dutyCycleUpdate">Override</string>
+
+    <string name="blinky_button">Button</string>
+    <string name="blinky_button_descr">The button state</string>
+    <string name="blinky_on">ON</string>
+    <string name="blinky_off">OFF</string>
+
+    <string name="scanner_title">Fridge Fan Control</string>
+
+    <string name="camperFan_temp">Temperature</string>
+    <string name="camperFan_temp_descr">Current temperature °C</string>
+    <string name="camperFan_forcedOn">Forced</string>
+    <string name="camperFan_forcedOff">Free</string>
+    <string name="camperFan_threshold_descr">Current threshold °C</string>
+    <string name="camperFan_threshold">Threshold</string>
+
+    <string name="camperFan_duty_descr">DutyCycle %</string>
+    <string name="camperFan_duty">DutyCycle</string>
+    <string name="camperFan_settings">Settings</string>
+    <string name="camperFan_powerOn">PowerOn</string>
+    <string name="camperFan_Fan2">Fan2</string>
+    <string name="camperFan_threshold_set">Threshold °C</string>
+    <string name="camperFan_duty_set">DutyCycle SetPoint</string>
+    <string name="camperFan_password_set">Password</string>
+    <string name="camperFan_applicationSettings">Application Settings</string>
+
+</resources>
