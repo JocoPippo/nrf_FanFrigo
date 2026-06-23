@@ -15,11 +15,14 @@ Ci si riferisca al file README.md interno a ciascuna cartella per dettagli speci
 # BOARD
 Attualmente la revisione del pcb è la 2.0 in cui è stato aggiunto il supporto per il sensore tachimetrico per ciascuna ventola e la possibilità di valutare la tensione della batteria. Al fine di mantenere i consumi bassi si è scelto di inserire il partitore di tensione sotto il mosfet di controllo della ventola1. Questa scelta, benchè renda più semplice il pcb, complica la parte software che è ancora in fase di sviluppo. Probabilmente verrà sostituta aggiungendo un ulteriore switch.
 ![Vista lato superiore](hardware/images/pcb2.png "Front")
+
 ![Vista lato inferiore](hardware/images/pcb3.png "BacK")
 
 
 
 # SOFTWARE GESTIONE
 Basato sull'esempio "NRF Blinky" della nordic semiconductor è stato customizzato aggiungendo le funzionalità di riservatezza e di gestione della board.
-La ![pagina di gestione](https://github.com/JocoPippo/nrf_FanFrigo/blob/main/AndroidApp/images/app1.png "Board Status") consente di vedere lo stato corrente ed, eventualmente, di forzarlo.
-Nella ![pagina di settings](https://github.com/JocoPippo/nrf_FanFrigo/blob/main/AndroidApp/images/App2.png "App Settings") si può cambiare la password che avrà valore transitorio fino al nuovo reset della scheda o tramite il ciclo power-off -> power-on o attraverso la pressione del tasto di reset.
+
+La [pagina di gestione](AndroidApp/images/app1.png) consente di vedere lo stato corrente ed, eventualmente, di forzarlo. ![pagina di gestione](AndroidApp/images/app1.png "Board Status")
+
+Nella [pagina di settings](AndroidApp/images/App2.png ) si può cambiare la password che avrà valore transitorio fino al nuovo reset della scheda o tramite il ciclo power-off -> power-on o attraverso la pressione del tasto di reset. ![pagina di settings](AndroidApp/images/App2.png "App Settings")
