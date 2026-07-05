@@ -37,3 +37,21 @@ Assieme alla prossima revisione hardware verranno aggiunte:
 - il monitoraggio della tesione della battaria durante l'azionamento della ventola principale.
 
 
+
+# Creazione build per DFU/FOTA
+Per poter eseguire l'aggiornamento via BLE NRF mette a disposizione un sistema automatico per creare il bootloader e integrare nell'applicativo la parte di gestione e scrittura del firmware. E' necessario creare una build che contenga il bootloader e le immagini per i due slot. 
+Per rendere il sistema più sicuro è necessario generare una chiave per la firma che nel notro caso si dovrà chiamere _fan_private_2048.pem_ in quanto il makefile è configurato per questo nome file.
+Di seguito i comandi da eseguire per creare la prima immagine da flashare direttamente e il pacchetto __dfu_application.zip__ che contiene il firmware per l'aggiornamento.
+
+
+### la generazione della chiave di cifratura
+_openssl genrsa -out fan_private_2048.pem 2048_
+
+### la build
+_west build -b ebyte_e73_tbb/nrf52832 -- -DSB_CONFIG_BOOTLOADER_MCUBOOT=y -DSB_CONFIG_MCUBOOT_MODE_DIRECT_XIP=y -DCONFIG_NCS_SAMPLE_MCUMGR_BT_OTA_DFU=y -DDTC_OVERLAY_FILE="C:/ncs/test_code/basic/nrf_FanFrigo/peripheral_frigo/boards/ebyte_e73_tbab_nrf52832.overlay" -DDTC_EXTRA_OVERLAY_FILE="C:/ncs/test_code/basic/nrf_FanFrigo/peripheral_frigo/arduino_serial.overlay"_
+
+### il flash completo
+ _west flash_   
+
+## DFU
+Per il caricamento del firmware può essere utilizzata l'applicazione __"nRF Connect"__ o, in alternativa, __"Device Manager"__. Una volta associato il dispositivo basta inviare il file et voilà l'aggiornamento è servito.

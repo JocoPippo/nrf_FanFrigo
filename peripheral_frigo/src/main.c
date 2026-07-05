@@ -39,7 +39,8 @@ LOG_MODULE_REGISTER(Fan_Frigo_Camper, 1);
 #define RUN_LED_BLINK_INTERVAL 2000
 
 #define MAX_PULSE_NS 50000
-#define MAX_PULSE_2FAN2 35000
+#define MAX_PULSE_2FAN2 30000
+//#define MAX_PULSE_2FAN2 20000
 #define MIN_PULSE_WIDTH	7500
 //#define MIN_PULSE_WIDTH	250
 
@@ -49,7 +50,7 @@ LOG_MODULE_REGISTER(Fan_Frigo_Camper, 1);
 #define HI_INT2FLOAT_MASK  0xFFFF0000U
 #define LOW_INT2FLOAT_MASK 0x0000FFFFU
 
-#define MAX_TEMPERATURE 90U
+#define MAX_TEMPERATURE 80U
 
 #define STORAGE_SETTINGS_ROOT "up"
 #define STORAGE_SETTINGS_KEY  "key"
@@ -84,7 +85,7 @@ static bool local_fan2State = false;
 static struct stateAndValueBool app_fan2State = {false,false};
 static bool app_poweron_state = true;
 static uint32_t app_temperature_value = 10<<INT2FLOAT_BITS;
-static struct stateAndValueU32 app_threshold ={42<<INT2FLOAT_BITS, false};// = 42<<INT2FLOAT_BITS;
+static struct stateAndValueU32 app_threshold ={32<<INT2FLOAT_BITS, false};// = 42<<INT2FLOAT_BITS;
 static bool app_leds_state = true;
 static bool connection_state = false;
 static bool pwmOff = false;
@@ -250,6 +251,8 @@ static uint32_t percentage2Uint(uint32_t percentage) {
 
 	uint32_t result;
 	float tmp = getFloatTemp4Int(percentage); // percentage in float rappresentation
+	if(tmp > ((float)MAX_PULSE_2FAN2/((float)MAX_PULSE_NS)*100.0f))
+		tmp *=2;	
 	result = (tmp * (float)MAX_PULSE_NS/100.0f);
 	return result;
 }
@@ -478,11 +481,9 @@ static void setDeviceEnableState(bool enabled) {
 		}
 		if(pwm_set_pulse_dt(&pwm_fan1, 0) !=0 ) {
     		LOG_ERR("Error: setting 0 pulse to device %s", pwm_fan1.dev->name);
-    		return -1;
 		}
 		if(pwm_set_pulse_dt(&pwm_fan2, 0) !=0 ) {
     		LOG_ERR("Error: setting 0 pulse to device %s", pwm_fan2.dev->name);
-    		return -1;
 		}
 	}
 }
@@ -752,8 +753,21 @@ int32_t setPwmDuration(void) {
 		float dT = getFloatTemp4Int(app_temperature_value) - appTh ;
 		float TRange = MAX_TEMPERATURE - appTh;
 		float dRange = MAX_PULSE_NS;
-		if(dT>0)
-			dutyPulse = (int32_t)(dT * dRange / TRange);
+ 
+		if(dT>0) {
+			if( dT/TRange > ((float)MAX_PULSE_2FAN2/dRange)) {
+				//implies the fan2 should start so the range became half
+				float t2fan2 = (float)MAX_PULSE_2FAN2/dRange * TRange + appTh; 
+				dRange = (MAX_PULSE_NS <<1) - MAX_PULSE_2FAN2;
+				
+				dT = getFloatTemp4Int(app_temperature_value) - t2fan2;
+				TRange = MAX_TEMPERATURE - t2fan2;
+				dutyPulse = (int32_t)(dT * dRange / TRange) + MAX_PULSE_2FAN2;	
+
+			}
+			else
+				dutyPulse = (int32_t)(dT * dRange / TRange) ;
+		}
 		else
 			dutyPulse = 0;
 	}
@@ -787,7 +801,7 @@ int32_t setPwmDuration(void) {
 
 	//in case the fan2 is active then half the required dutycyle
 	//this check shall be performed on every iteration 
-	if(dutyPulse>(MAX_PULSE_2FAN2) && !local_fan2State) {
+	if(dutyPulse>(MAX_PULSE_2FAN2) && local_fan2State) {
 		//Enable FAN2 and reduce the pulse
 		//implicit in the if condition
 //		local_fan2State = true;
