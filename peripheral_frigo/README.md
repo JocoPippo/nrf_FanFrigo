@@ -7,9 +7,9 @@ Così ho deciso di realizzare una soluzione che permetesse di:
 - la seconda ventola, sen non forzata da applicativo, viene attivata quando la prima supera la soglia del 70% di utilizzo così da ridurre la rumorosità;
 - non pesare sui consumi elettrici quando non necessario.
 
-La definizione dell'hardware la potete trovare qui: https://github.com/JocoPippo/nrf_FanFrigo. Utilizza una board custom, un sensore di temperatura DS18B20 e due ventole da 120x120mm (ma possono essere sostituite in base alla dimensione dello spazio utile a vostra disposizione).
+La definizione dell'hardware la potete trovare qui: [hardware](../hardware/Ventole_Nrf52/). Utilizza una board custom, un sensore di temperatura DS18B20 e due ventole da 120x120mm (ma possono essere sostituite in base alla dimensione dello spazio utile a vostra disposizione).
 
-L'applicazione di gestione su android la potete trovare qui: https://github.com/JocoPippo/nrf_FanFrigo. Basata sulla demo [Nrf BLINKY](https://github.com/nordicsemi/Android-nRF-Blinky) della nordic semiconductor è stata customizzata per il controllo e gestione della board custom. 
+L'applicazione di gestione su android la potete trovare qui: [AndroidApp](../AndroidApp/README.md). Basata sulla demo [Nrf BLINKY](https://github.com/nordicsemi/Android-nRF-Blinky) della nordic semiconductor è stata customizzata per il controllo e gestione della board custom. 
 
 # Dettagli
 Il firmware per la [board](https://github.com/JocoPippo/nrf_FanFrigo) si basa sul modulo [E73-2G4M04S1B](https://www.cdebyte.com/products/E73-2G4M04S1B/2) che utilizza il chip nfr52832 della nordic semiconductor, un ultra low power BLE soc che consente di controllare le ventole da remoto e, se in stand by mode consuma solo 3.5uA e circa 70uA in normal mode senza attivazione delle ventole.
