@@ -50,10 +50,10 @@ _openssl genrsa -out fan_private_2048.pem 2048_
 ### la build
 entrare nella cartella del progetto _peripheral_frigo_ (cd <prj_path>/nrf_FanFrigo/peripheral_frigo)
 
-_west build [-p] -b ebyte_e73_tbb/nrf52832 -- -DSB_CONFIG_BOOTLOADER_MCUBOOT=y -DSB_CONFIG_MCUBOOT_MODE_DIRECT_XIP=y -DCONFIG_NCS_SAMPLE_MCUMGR_BT_OTA_DFU=y -DDTC_OVERLAY_FILE=" <prj_path>/nrf_FanFrigo/peripheral_frigo/boards/ebyte_e73_tbab_nrf52832.overlay" -DDTC_EXTRA_OVERLAY_FILE=" <prj_path>/nrf_FanFrigo/peripheral_frigo/arduino_serial.overlay"_
+_west build [-p] -b ebyte_e73_tbb/nrf52832 -- -DSB_CONFIG_BOOTLOADER_MCUBOOT=y ~~-DSB_CONFIG_MCUBOOT_MODE_DIRECT_XIP=y~~ -DCONFIG_NCS_SAMPLE_MCUMGR_BT_OTA_DFU=y -DDTC_OVERLAY_FILE=" <prj_path>/nrf_FanFrigo/peripheral_frigo/boards/ebyte_e73_tbab_nrf52832.overlay" -DDTC_EXTRA_OVERLAY_FILE=" <prj_path>/nrf_FanFrigo/peripheral_frigo/arduino_serial.overlay"_
 
 L'opzione [-p] p è da usare per una _"pristine build"_, quindi la prima volta o quando si cambia la configurazione.
-
+La modalità _SB_CONFIG_MCUBOOT_MODE_DIRECT_XIP_ non sembra funzionare correttamente durante l'aggiornamento, per ora è stata rimossa fino a quando non verrà scoprirta la causa.
 Il segnaposto <prj_path> deve essere sostituito con il percorsco completo dove è presente il progetto _"nrf_FanFrigo"_
 
 ### il flash completo
